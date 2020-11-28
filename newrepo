@@ -1,0 +1,25 @@
+#!/bin/rc -e
+
+flagfmt='p:priv, d:desc desc, c:contact contact'
+args='[repo ...]'
+eval `''{aux/getflags $*} || exec aux/usage
+
+fn whoami{
+	if(test -f /adm/keys.who){
+		if(~ $email '')
+			email=`{awk -F'|' '$1=="'$user'" {x=$5} END{print x}' </adm/keys.who}
+	}
+	if(~ $email '')
+		email=glenda@9front.local
+}
+
+cd /usr/git/$user
+for(repo in $*){
+	git/init $1
+	if(~ $#priv 0)
+		touch $1/.git/webpublish
+	if(! ~ $#desc 0)
+		echo $desc >$1/.git/desc
+	if(! ~ $#contact 0)
+		echo $contact >$1/.git/contact
+}
