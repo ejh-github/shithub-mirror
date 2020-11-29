@@ -54,7 +54,11 @@ fn prelude {
 				max-width: 50em;
 				font-family: sans-serif;
 			}
-			h1,h2{
+			h1{
+				font-size: 1.5em;
+				color: #4c4c99;
+			}
+			h2{
 				font-size: 1.3em;
 				color: #4c4c99;
 			}
@@ -70,7 +74,7 @@ fn prelude {
 		</style>
 	 	<link rel="alternate" type="application/rss+xml" href="feed.rss" title="rss">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Shithub</title>
+		<title>Shithub: '$*'</title>
 	</head>
 	<body>
 	'
@@ -79,7 +83,7 @@ fn prelude {
 switch($1){
 case 'list'
 	rfork m
-	prelude
+	prelude Repolist
 	echo '	<h1>Repos</h1>
 		<dl>'
 	for(repo in `$nl{ls */}){
@@ -120,10 +124,25 @@ case 'info'
 		echo '<b>invalid ref '$refname'</b>'
 		exit
 	}
+
+	prelude $repo $ref
+	if(! test -d /mnt/git/$ref/tree){
+		echo '	<h1><a href="/git/repos.html">Git</a>: <a
+			href=/git/'$gituser/$repo'/'$ref'/info.html>'$repo'</a></h1>
+			<p>
+			<b>clone:</b> git://shithub.us/'$gituser/$repo', gits://shithub.us/'$gituser/$repo'<br>
+			<b>push:</b> hjgit://shithub.us/'$gituser/$repo'<br>
+			</p>
+			<h2>No code pushed</h2>
+			</body>
+			</html>
+		'
+		exit
+	}
+		
 	cd /mnt/git/$ref/tree
 	hash=`{cat /mnt/git/$ref/hash}
 
-	prelude $repo $ref $repo
 	echo '	<h1><a href="/git/repos.html">Git</a>: <a
 		href=/git/'$gituser/$repo'/'$ref'/info.html>'$repo'</a></h1>
 		<p>'$repo' @ <a href='/git/$gituser/$repo/$hash/f.html'>'$hash'</a>
@@ -181,7 +200,7 @@ case 'view'
 		file='.'
 	hash=`{cat /mnt/git/$ref/hash}
 
-	prelude
+	prelude $repo $file
 	echo '	<h1><a href="/git/repos.html">Git</a>: <a
 		href='/git/$gituser/$repo/$ref/info.html'>'$repo'</a></h1>
 		<p>'$repo' @ <a href="'/git/$gituser/$repo/$hash/f.html'">'$hash'</a>
