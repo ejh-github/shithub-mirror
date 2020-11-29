@@ -19,7 +19,7 @@ for(repo in $*){
 	if(~ $#priv 0)
 		touch $1/.git/webpublish
 	if(! ~ $#desc 0)
-		echo $desc >$1/.git/desc
+		echo $desc >$1/.git/description
 	if(! ~ $#contact 0)
 		echo $contact >$1/.git/contact
 }

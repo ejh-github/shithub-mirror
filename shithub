@@ -92,6 +92,8 @@ case 'list'
 			echo '<dd>'
 			if(test -f $repo/.git/desc)
 				htcat $repo/.git/desc
+			if not if(test -f $repo/.git/desc)
+				htcat $repo/.git/desc
 			if not
 				echo 'code some guy wrote'
 			echo '</dd>'
@@ -176,6 +178,8 @@ case 'info'
 		htcat README.md
 	if not if(test -f $repodir/desc)
 		htcat $repodir/desc
+	if not if(test -f $repodir/description)
+		htcat $repodir/description
 	if not
 		echo 'this repo has no description'
 	echo '
