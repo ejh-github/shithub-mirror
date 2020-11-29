@@ -27,7 +27,7 @@
 </head>
 <body>
 <h1>Shitub</h1>
-<h2>Like Github, but Shit.</h2>
+<h2>The Scented Git Host</h2>
 
 <p>Shithub is a site for hosting git repositories. It's
 running on <a href="https://orib.dev/git9.html">git9</a>,
@@ -39,21 +39,66 @@ hosted on <a href=http://9front.org>9front</a>.</p>
 
 <p><a href="git/repos.html">Repo List</a></p>
 
-<h2>Using Shithub</h2>
 
-Creating a repository:
-
-<pre>
-rcpu -h shithub.us \
-	-c newrepo -d 'description' -c 'contact@me.com' repo
-git/push -u hjgit://shithub.us/$user/repo
-</pre>
 
 <h2>Getting A Shithub Account</h2>
 
 <p>To get an account, email <a href="mailto:ori@eigenstate.org">
 Ori Bernstein &lt;ori@eigenstate.org&gt;</a>, and ask for an
 account.</p>
+
+<h2>Using Shithub</h2>
+
+Creating a repository:
+
+<pre>
+	rcpu -h shithub.us \
+		-c newrepo -d 'description' \
+		-c 'contact@me.com' repo
+git/push -u hjgit://shithub.us/$user/repo
+</pre>
+
+<p>Your repositories live under</p>
+
+<pre>
+	/usr/git/$username
+</pre>
+
+<p>You can cd into there manually, create
+them, and flag them as web-visible by
+hand, or you can use the <code>newrepo</code>
+script:</p>
+
+<pre>
+	newrepo [-d description] [-c contact] reponame
+</pre>
+
+<p>
+README files in the repo will be rendered,
+but if you don't want to clutter root of your
+repository with junk, you can also add
+README files here:
+</p>
+
+<pre>
+	/usr/git/$user/$repo/.git/README
+</pre>
+
+<p>The code running this site is fully open source.
+It's hosted on shithub, here:</p>
+
+<pre>
+	<a href="/git/ori/shithub/info.html">gits://shithub.us/ori/shithub</a>
+</pre>
+
+<p>I'd eventually like it to grow some basic
+features for reviewing and discussing patches,
+maybe based around mailing lists, though the
+ideas are still rough.</p>
+
+<p>Things are pretty early -- the web UI is just
+3 days old and rather rudimentary, so patches
+definitely welcome.</p>
 
 </body>
 </html>
