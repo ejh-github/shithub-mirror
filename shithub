@@ -160,7 +160,7 @@ case 'info'
 	echo '	</pre>
 		<h2>Code</h2>
 		<p>
-		<b>clone:</b> git://shithub.us/'$gituser/$repo', gits://shithub.us/'$gituser/$repo'<br>
+		<b>clone:</b> git://shithub.us/'$gituser/$repo' gits://shithub.us/'$gituser/$repo'<br>
 		<b>push:</b> hjgit://shithub.us/'$gituser/$repo'<br>
 		<b>tar:</b> <a href="'/git/$gituser/$repo/$hash/snap.tar.gz'">snap.tar.gz</a><br>'
 	if(test -f $repodir/contact)
