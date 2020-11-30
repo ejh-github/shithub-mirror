@@ -84,9 +84,14 @@ switch($1){
 case 'list'
 	rfork m
 	prelude Repolist
-	echo '	<h1>Repos</h1>
-		<dl>'
+	echo '	<h1>Repos</h1>'
+	udir=()
 	for(repo in `$nl{ls */}){
+		ndir=`{basename -d $repo}
+		if(! ~ $udir $ndir){
+			echo '<h3>'$ndir'</h3>'
+			echo '<dl>'
+		}
 		if(test -e $repo/.git/webpublish){
 			echo '<dt><a href="/git/'$repo'/HEAD/info.html">'$repo'</a></dt>'
 			echo '<dd>'
@@ -97,6 +102,10 @@ case 'list'
 			if not
 				echo 'code some guy wrote'
 			echo '</dd>'
+		}
+		if(! ~ $udir $ndir){
+			echo '</dl>'
+			udir=$ndir
 		}
 	}
 	echo '</dl>'
