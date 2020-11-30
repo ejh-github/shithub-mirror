@@ -100,10 +100,10 @@ case 'list'
 			echo '<dd>'
 			if(test -f $repo/.git/desc)
 				htcat $repo/.git/desc
-			if not if(test -f $repo/.git/desc)
-				htcat $repo/.git/desc
+			if not if(test -f $repo/.git/description)
+				htcat $repo/.git/description
 			if not
-				echo 'code some guy wrote'
+				echo 'probably some code'
 			echo '</dd>'
 		}
 	}
