@@ -88,6 +88,8 @@ case 'list'
 	udir=()
 	for(repo in `$nl{ls */}){
 		ndir=`{basename -d $repo}
+		if(! ~ $udir)
+			echo '</dl>'
 		if(! ~ $udir $ndir){
 			echo '<h3>'$ndir'</h3>'
 			echo '<dl>'
@@ -103,12 +105,8 @@ case 'list'
 				echo 'code some guy wrote'
 			echo '</dd>'
 		}
-		if(! ~ $udir $ndir){
-			echo '</dl>'
-			udir=$ndir
-		}
+		udir=$ndir
 	}
-	echo '</dl>'
 
 case 'tar'
 	gituser=$2
