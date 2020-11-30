@@ -88,11 +88,12 @@ case 'list'
 	udir=()
 	for(repo in `$nl{ls */}){
 		ndir=`{basename -d $repo}
-		if(! ~ $udir)
+		if(! ~ $udir $ndir)
 			echo '</dl>'
 		if(! ~ $udir $ndir){
 			echo '<h3>'$ndir'</h3>'
 			echo '<dl>'
+			udir=$ndir
 		}
 		if(test -e $repo/.git/webpublish){
 			echo '<dt><a href="/git/'$repo'/HEAD/info.html">'$repo'</a></dt>'
@@ -105,7 +106,6 @@ case 'list'
 				echo 'code some guy wrote'
 			echo '</dd>'
 		}
-		udir=$ndir
 	}
 
 case 'tar'
