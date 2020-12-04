@@ -213,7 +213,7 @@ case 'view'
 
 	prelude $repo $file
 	echo '	<h1><a href="/git/repos.html">Git</a>: <a
-		href='/git/$gituser/$repo/$ref/info.html'>'$repo'</a></h1>
+		href='/git/$gituser/$repo/$hash/info.html'>'$repo'</a></h1>
 		<p>'$repo' @ <a href="'/git/$gituser/$repo/$hash/f.html'">'$hash'</a>
 		<pre id="code">'
 	if(test -f $file){
