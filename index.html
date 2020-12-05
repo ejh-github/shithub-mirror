@@ -65,13 +65,37 @@ Creating a repository:
 <p>Your repositories live under</p>
 
 <pre>
-	/usr/git/$username
+	/usr/git/$user
 </pre>
 
-<p>You can cd into there manually, create
-them, and flag them as web-visible by
-hand, or you can use the <code>newrepo</code>
-script:</p>
+<p>A repo contains a few control files for the web
+interface. All of them live under the repository,
+in /usr/git/$user/$repo/.git/$file. These are the
+control files that are currently supported:</p>
+
+<p>
+<dl>
+<dt><code>webpublish</code></dt>
+<dd>If this file exists, then the repository is
+published in the public web list of repositories.
+</dd>
+<dt><code>desc, description</code></dt>
+<dd>The short description of the repository. It shows
+up in the repo list.</dd>
+<dt><code>README</code></dt>
+<dd>A readme file, shown in the info page of the
+repository. If this file is not present, then a
+README from within the repository will be used,
+and if neither exist, then the description will
+be used.</dd>
+</dl>
+</p>
+
+<p>You can cd into there create the repository,
+and flag them as web-visible by hand, or you can
+use the <code>newrepo</code>
+script, which is a small wrapper around <code>
+git/init</code> that creates the control files:</p>
 
 <pre>
 	newrepo [-d description] [-c contact] reponame
@@ -100,9 +124,9 @@ features for reviewing and discussing patches,
 maybe based around mailing lists, though the
 ideas are still rough.</p>
 
-<p>Things are pretty early -- the web UI is just
-3 days old and rather rudimentary, so patches
-definitely welcome.</p>
+<p>Things are pretty early -- the web UI is brand
+new and rather rudimentary, so improvements are
+gladly welcome.</p>
 
 </body>
 </html>
