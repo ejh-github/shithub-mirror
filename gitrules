@@ -1,5 +1,4 @@
 /repos.html					/bin/shithub /usr/git list
-/([^'/]+)/([^'/]+)/info.html			/bin/shithub /usr/git info '\1' '\2' HEAD
 /([^'/]+)/([^'/]+)/([^'/]+)/info.html		/bin/shithub /usr/git info '\1' '\2' '\3'
 /([^'/]+)/([^'/]+)/([^'/]+)/snap.tar.gz		/bin/shithub /usr/git tar '\1' '\2' '\3'
 /([^'/]+)/([^'/]+)/([^'/]+)/(([^']+)/)?f.html	/bin/shithub /usr/git view '\1' '\2' '\3' '\5'
