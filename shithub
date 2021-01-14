@@ -50,7 +50,8 @@ fn prelude {
 	<head>
 		<style type="text/css">
 			body{
-				margin: 3em auto;
+				padding: 3em;
+				margin: auto;
 				max-width: 50em;
 				font-family: sans-serif;
 			}
@@ -74,6 +75,7 @@ fn prelude {
 		</style>
 	 	<link rel="alternate" type="application/rss+xml" href="feed.rss" title="rss">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<title>Shithub: '$*'</title>
 	</head>
 	<body>
