@@ -61,6 +61,17 @@ missing a number of features</p>
 
 <p>
 <dl>
+	<dt>9p</dt>
+	<dd>
+	Right now, shithub provides no 9p
+	interface. Providing the repositories
+	directly over 9p is pointless, but
+	mounting each repositories git/fs
+	all the time could lead to excessive
+	memory use, since git/fs caches too
+	aggressively. Work on useful 9p browsing
+	is needed.
+	</dd>
 	<dt>Bug tracking</dt>
 	<dd>
 	It should be possible to report bugs in
