@@ -70,13 +70,14 @@ fn prelude {
 
 			#code{
 				background: #ffffea;
-				border: #99994cff
+				border: #99994cff;
+				overflow: auto;
 			}
 		</style>
 	 	<link rel="alternate" type="application/rss+xml" href="feed.rss" title="rss">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<title>Shithub: '$*'</title>
+		<title>Shithub: '$"1'</title>
 	</head>
 	<body>
 	'
