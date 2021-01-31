@@ -87,9 +87,7 @@ fn difftohtml {
 	/^\+.*$/ { printf "<div id='add'>%s</div>", $0; next }
 	/^-.*$/ { printf "<div id='del'>%s</div>", $0; next }
 	{ if(started) { printf "&nbsp;%s<br/>", substr($0, 2); } }
-	' 
-	| sed '	s/	/\&nbsp;\&nbsp;\&nbsp;\&nbsp;/g;
-		s/^ /\&nbsp;/g'
+	'
 }
 
 fn prelude {
@@ -306,13 +304,13 @@ case 'files'
 		<b>ref:</b> <a href="'/git/$gituser/$repo/$hash/files.html'">'$hash'</a><br/>
 		<b>tar:</b> <a href="'/git/$gituser/$repo/$hash/snap.tar.gz'">snap.tar.gz</a><br/></p>'
 
-	echo '<p><pre id="code">'
+	echo '<p><div id="code">'
 	for(f in `$nl{ls}){
 		url=`$nl{echo -n $f/f.html | urlencode}
 		fname=`$nl{echo -n $f | htcat}
-		echo '<a href="'$url'">'$fname'</a>'
+		echo '<a href="'$url'">'$fname'</a><br/>'
 	}		
-	echo '	</pre>
+	echo '	</div>
 		</p>
 		</body>
 		</html>'
@@ -335,7 +333,9 @@ case 'view'
 
 	user_prelude $gituser $repo $hash
 
-	echo '	<p>'$repo' @ <a href="'/git/$gituser/$repo/$hash/f.html'">'$hash'</a><br/></p>'
+	echo '	<p>
+		<b>ref:</b> <a href="'/git/$gituser/$repo/$hash/files.html'">'$hash'</a><br/>
+		</p>'
 	if(test -f $file){
 		echo '	<a href="'/git/$gituser/$repo/$hash/$file'/raw">View raw version</a>'
 		type=`{file -m $file}
