@@ -200,19 +200,17 @@ case 'info'
 
 	user_prelude $gituser $repo $hash		
 	echo '	<h3>Clone</h3>
-		<p>
+		<div>
 		<b>clone:</b> git://shithub.us/'$gituser/$repo' gits://shithub.us/'$gituser/$repo'<br>
 		<b>push:</b> hjgit://shithub.us/'$gituser/$repo'<br>'
 	if(test -f $repodir/contact)
-		echo '	<b>patches to: </b>'^`$nl{cat $repodir/contact}^'<br>
-			</p>'
+		echo '	<b>patches to: </b>'^`$nl{cat $repodir/contact}^'<br>'
+	echo '	</div>'
+	
 
 	if(test -f /mnt/git/object/$hash/msg){
-		echo '	<h3>Last commit</h3>
-			<p>'$repo' @ <a href='/git/$gituser/$repo/$hash/f.html'>'$hash'</a>
-			<pre id="desc">'
-		htcat /mnt/git/object/$hash/msg
-		echo '	</pre>'
+		echo '	<h3>Last commit</h3>'
+		formatcommit $hash
 	}
 
 	echo '	<h3>About</h3>
