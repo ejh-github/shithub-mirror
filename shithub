@@ -256,13 +256,15 @@ case 'view'
 
 	user_prelude $gituser $repo $hash
 
-	echo '	<p>'$repo' @ <a href="'/git/$gituser/$repo/$hash/f.html'">'$hash'</a>
-		<pre id="code">'
+	echo '	<p>'$repo' @ <a href="'/git/$gituser/$repo/$hash/f.html'">'$hash'</a><br/></p>'
 	if(test -f $file){
+		echo '	<a href="'/git/$gituser/$repo/$hash/$file'/raw">View raw version</a>'
+		echo '	<pre id="code">'
 		htcat $file
 	}
 	if not if(test -d $file){
 		cd $file
+		echo '	<pre id="code">'
 		for(f in `$nl{ls}){
 			url=`$nl{echo -n $f/f.html | urlencode}
 			fname=`$nl{echo -n $f | htcat}
@@ -272,4 +274,19 @@ case 'view'
 	echo '	</pre>
 		</body>
 		</html>'
+
+case 'viewraw'
+	gituser=$2
+	repo=$3
+	refname=$4
+	file=$5
+
+	repons $gituser $repo
+	if(! ref=`{resolveref $refname}){
+		echo 'invalid ref '$refname''
+		exit
+	}
+	cd /mnt/git/$ref/tree
+	cat $file
+
 }

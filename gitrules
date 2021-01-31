@@ -3,3 +3,4 @@
 /([^'/]+)/([^'/]+)/([^'/]+)/files.html		/bin/shithub /usr/git files '\1' '\2' '\3'
 /([^'/]+)/([^'/]+)/([^'/]+)/snap.tar.gz		/bin/shithub /usr/git tar '\1' '\2' '\3'
 /([^'/]+)/([^'/]+)/([^'/]+)/(([^']+)/)?f.html	/bin/shithub /usr/git view '\1' '\2' '\3' '\5'
+/([^'/]+)/([^'/]+)/([^'/]+)/(([^']+)/)?raw	/bin/shithub /usr/git viewraw '\1' '\2' '\3' '\5'
