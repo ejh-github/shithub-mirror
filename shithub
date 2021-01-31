@@ -406,8 +406,10 @@ case 'log'
 	cd /mnt/git/$ref/tree
 	echo '	<p>'
 	shortlog $ref 100
-	echo '	</p>
-		</body>
+	echo '	</p>'
+	if(! ~ $"commithash '')
+		echo '<a href="/git/'$gituser/$repo/$commithash'/log.html">Next</a>'
+	echo '	</body>
 		</html>'
 
 case 'show'
