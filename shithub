@@ -83,6 +83,21 @@ fn prelude {
 	'
 }
 
+fn user_prelude {
+	puser=$1
+	prepo=$2
+	phash=$3
+
+	prelude $prepo
+	echo '	<h1><a href="/git/repos.html">Git</a>: 
+		<a href="/git/'$puser/$prepo/$phash'/info.html">'$prepo'</a></h1>
+		<div id="linkbar">
+		<a href="/git/'$puser/$prepo/$phash'/info.html">Info</a>
+		&nbsp;•&nbsp;
+		<a href="/git/'$puser/$prepo/$phash'/files.html">Files</a>
+		</div>'
+}
+
 switch($1){
 case 'list'
 	rfork m
@@ -137,48 +152,29 @@ case 'info'
 		exit
 	}
 
-	prelude $repo $ref
-	if(! test -d /mnt/git/$ref/tree){
-		echo '	<h1><a href="/git/repos.html">Git</a>: <a
-			href=/git/'$gituser/$repo'/'$ref'/info.html>'$repo'</a></h1>
-			<p>
-			<b>clone:</b> git://shithub.us/'$gituser/$repo', gits://shithub.us/'$gituser/$repo'<br>
-			<b>push:</b> hjgit://shithub.us/'$gituser/$repo'<br>
-			</p>
-			<h2>No code pushed</h2>
-			</body>
-			</html>
-		'
-		exit
-	}
-		
-	cd /mnt/git/$ref/tree
-	hash=`{cat /mnt/git/$ref/hash}
+	if(test -f /mnt/git/$ref/hash)
+		hash=`{cat /mnt/git/$ref/hash}
+	if not
+		hash=$ref
 
-	echo '	<h1><a href="/git/repos.html">Git</a>: <a
-		href=/git/'$gituser/$repo'/'$ref'/info.html>'$repo'</a></h1>
-		<p>'$repo' @ <a href='/git/$gituser/$repo/$hash/f.html'>'$hash'</a>
-		<pre id="desc">'
-	htcat /mnt/git/object/$hash/msg
-	echo '	</pre>
-		<h2>Code</h2>
+	user_prelude $gituser $repo $hash		
+	echo '	<h3>Clone</h3>
 		<p>
 		<b>clone:</b> git://shithub.us/'$gituser/$repo' gits://shithub.us/'$gituser/$repo'<br>
-		<b>push:</b> hjgit://shithub.us/'$gituser/$repo'<br>
-		<b>tar:</b> <a href="'/git/$gituser/$repo/$hash/snap.tar.gz'">snap.tar.gz</a><br>'
+		<b>push:</b> hjgit://shithub.us/'$gituser/$repo'<br>'
 	if(test -f $repodir/contact)
-		echo '<b>patches to: </b>'^`$nl{cat $repodir/contact}^'<br>
+		echo '	<b>patches to: </b>'^`$nl{cat $repodir/contact}^'<br>
 			</p>'
 
-	echo '<pre id="code">'
-	for(f in `$nl{ls}){
-		url=`$nl{echo -n $f/f.html | urlencode}
-		fname=`$nl{echo -n $f | htcat}
-		echo '<a href="'$url'">'$fname'</a>'
-	}		
-	echo '</pre>
+	if(test -f /mnt/git/object/$hash/msg){
+		echo '	<h3>Last commit</h3>
+			<p>'$repo' @ <a href='/git/$gituser/$repo/$hash/f.html'>'$hash'</a>
+			<pre id="desc">'
+		htcat /mnt/git/object/$hash/msg
+		echo '	</pre>'
+	}
 
-		<h2>About This Repo</h2>
+	echo '	<h3>About</h3>
 		<pre id="desc">'
 	if(test -f $repodir/README)
 		htcat $repodir/README
@@ -198,6 +194,50 @@ case 'info'
 		</html>
 	'
 
+case 'files'
+	gituser=$2
+	repo=$3
+	refname=$4
+
+	repons $gituser $repo
+	repodir=/mnt/$repo/.git
+	if(! ref=`{resolveref $refname}){
+		echo '<b>invalid ref '$refname'</b>'
+		exit
+	}
+
+	if(test -f /mnt/git/$ref/hash)
+		hash=`{cat /mnt/git/$ref/hash}
+	if not
+		hash=$ref
+
+	user_prelude $gituser $repo $hash
+
+	if(! test -d /mnt/git/$ref/tree){
+		echo '	<p>No code pushed</p>
+			</body>
+			</html>
+		'
+		exit
+	}
+
+	cd /mnt/git/$ref/tree
+
+	echo '	<p>
+		<b>ref:</b> <a href="'/git/$gituser/$repo/$hash/files.html'">'$hash'</a><br/>
+		<b>tar:</b> <a href="'/git/$gituser/$repo/$hash/snap.tar.gz'">snap.tar.gz</a><br/></p>'
+
+	echo '<p><pre id="code">'
+	for(f in `$nl{ls}){
+		url=`$nl{echo -n $f/f.html | urlencode}
+		fname=`$nl{echo -n $f | htcat}
+		echo '<a href="'$url'">'$fname'</a>'
+	}		
+	echo '	</pre>
+		</p>
+		</body>
+		</html>'
+
 case 'view'
 	gituser=$2
 	repo=$3
@@ -214,10 +254,9 @@ case 'view'
 		file='.'
 	hash=`{cat /mnt/git/$ref/hash}
 
-	prelude $repo $file
-	echo '	<h1><a href="/git/repos.html">Git</a>: <a
-		href='/git/$gituser/$repo/$hash/info.html'>'$repo'</a></h1>
-		<p>'$repo' @ <a href="'/git/$gituser/$repo/$hash/f.html'">'$hash'</a>
+	user_prelude $gituser $repo $hash
+
+	echo '	<p>'$repo' @ <a href="'/git/$gituser/$repo/$hash/f.html'">'$hash'</a>
 		<pre id="code">'
 	if(test -f $file){
 		htcat $file
