@@ -315,7 +315,9 @@ case 'files'
 	for(f in `$nl{ls}){
 		url=`$nl{echo -n $f/f.html | urlencode}
 		fname=`$nl{echo -n $f | htcat}
-		echo '<a href="'$url'">'$fname'</a><br/>'
+		echo -n '<a href="'$url'">'$fname
+		if (test -d $f) echo '/'
+		echo '</a><br/>'
 	}		
 	echo '	</div>
 		</p>
@@ -359,13 +361,13 @@ case 'view'
 	}
 	if not if(test -d $file){
 		cd $file
-		echo '	<pre id="code">'
+		echo '	<div id="code">'
 		for(f in `$nl{ls}){
 			url=`$nl{echo -n $f/f.html | urlencode}
 			fname=`$nl{echo -n $f | htcat}
 			echo '<a href="'$url'">'$fname'</a>'
 		}
-		echo '	</pre>'
+		echo '	</div>'
 	}
 	echo '	</body>
 		</html>'
