@@ -259,8 +259,17 @@ case 'view'
 	echo '	<p>'$repo' @ <a href="'/git/$gituser/$repo/$hash/f.html'">'$hash'</a><br/></p>'
 	if(test -f $file){
 		echo '	<a href="'/git/$gituser/$repo/$hash/$file'/raw">View raw version</a>'
-		echo '	<pre id="code">'
-		htcat $file
+		type=`{file -m $file}
+		switch($type){
+		case text/*
+			echo '	<pre id="code">'
+			htcat $file
+			echo '	</pre>'
+		case image/*
+			echo '	<br/><div><img src="'/git/$gituser/$repo/$hash/$file'/raw" /></div>'
+		case *
+			echo '	<p>Binary file not displayed</p>'
+		}
 	}
 	if not if(test -d $file){
 		cd $file
@@ -270,9 +279,9 @@ case 'view'
 			fname=`$nl{echo -n $f | htcat}
 			echo '<a href="'$url'">'$fname'</a>'
 		}
+		echo '	</pre>'
 	}
-	echo '	</pre>
-		</body>
+	echo '	</body>
 		</html>'
 
 case 'viewraw'
