@@ -5,3 +5,5 @@
 /([^'/]+)/([^'/]+)/([^'/]+)/(([^']+)/)?f.html	/bin/shithub /usr/git view '\1' '\2' '\3' '\5'
 /([^'/]+)/([^'/]+)/([^'/]+)/(([^']+)/)?raw	/bin/shithub /usr/git viewraw '\1' '\2' '\3' '\5'
 /([^'/]+)/([^'/]+)/([^'/]+)/log.html		/bin/shithub /usr/git log '\1' '\2' '\3'
+/([^'/]+)/([^'/]+)/([^'/]+)/commit.html		/bin/shithub /usr/git show '\1' '\2' '\3'
+/([^'/]+)/([^'/]+)/([^'/]+)/patch		/bin/shithub /usr/git patch '\1' '\2' '\3'

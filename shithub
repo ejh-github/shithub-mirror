@@ -32,13 +32,17 @@ fn resolveref {
 fn repons {
 	mntgen
 	mntgen /mnt/mnt
+	ramfs -m /mnt/tmp
 	bind /bin /mnt/bin
-	bind /tmp /mnt/tmp
+	bind /rc /mnt/rc
+	bind /sys /mnt/sys
 	bind -c /env /mnt/env
+	bind /dev /mnt/dev
 	bind $1/$2 /mnt/$repo
 	bind /mnt /
 	cd /mnt/$repo
 	git/fs
+	mntgen /mnt/scratch
 	rfork m
 }
 
@@ -50,9 +54,9 @@ fn formatcommit {
 	author=`"{htcat /mnt/git/object/$phash/author | awk '{print $1}'}
 	shorthash=`{echo $phash | awk '{print substr($0, 0, 8)}'}
 	echo '	<div id="commit">
-		'$shorthash' – '$author' – '$"date'
-		<pre>
-		'$"message'</pre>
+		<a href=/git/'$gituser/$repo/$phash'/commit.html>'$shorthash'</a>
+		 – '$author' – '$"date'
+		<pre>'$"message'</pre>
 		</div>'
 }
 
@@ -70,6 +74,22 @@ fn shortlog {
 		commithash=`{cat /mnt/git/object/$commithash/parent | sed 1q}
 	}
 	cd $d
+}
+
+fn difftohtml {
+	awk '
+	BEGIN { started = 0; diff = 0; }
+	/^---$/ { diff = 1; next }
+	/^diff .*$/ { if(diff && !started) started = 1; next }
+	/^\+\+\+ .*$/ { printf "<div id='files'>%s</div>", $0; next }
+	/^--- .*$/ { printf "<div id='files'>%s</div>", $0; next }
+	/^@@ .*$/ { printf "<div id='separator'>%s</div>", $0; next }
+	/^\+.*$/ { printf "<div id='add'>%s</div>", $0; next }
+	/^-.*$/ { printf "<div id='del'>%s</div>", $0; next }
+	{ if(started) { printf "&nbsp;%s<br/>", substr($0, 2); } }
+	' 
+	| sed '	s/	/\&nbsp;\&nbsp;\&nbsp;\&nbsp;/g;
+		s/^ /\&nbsp;/g'
 }
 
 fn prelude {
@@ -112,6 +132,26 @@ fn prelude {
 				padding: 4px;
 			}
 
+			#diff{
+				font-family: monospace;
+				border: 2px solid #efefef;
+			}
+
+			#diff #files{
+				background: #efefef;
+			}
+
+			#diff #separator{
+				background: #eaffff;
+			}
+
+			#diff #add{
+				background: #e6ffed;
+			}
+
+			#diff #del{
+				background: #ffeef0;
+			}
 		</style>
 	 	<link rel="alternate" type="application/rss+xml" href="feed.rss" title="rss">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -364,9 +404,57 @@ case 'log'
 		exit
 	}
 	cd /mnt/git/$ref/tree
-	echo '<br/>'
+	echo '	<p>'
 	shortlog $ref 100
-	echo '	</body>
+	echo '	</p>
+		</body>
 		</html>'
 
+case 'show'
+	gituser=$2
+	repo=$3
+	refname=$4
+
+	repons $gituser $repo
+	repodir=/mnt/$repo/.git
+	if(! ref=`{resolveref $refname}){
+		echo '<b>invalid ref '$refname'</b>'
+		exit
+	}
+
+	user_prelude $gituser $repo $refname
+
+	oldcommit=`{cat /mnt/git/$ref/parent}
+	author=`''{htcat /mnt/git/$ref/author}
+	date=`''{date `{mtime /mnt/git/$ref/msg | awk '{print $1}'}}
+	msg=`''{htcat /mnt/git/$ref/msg}
+	echo '	<p>
+		<a href="/git/'$gituser/$repo/$refname'/patch">Download patch</a><br/>
+		</p>
+		<p>
+		<b>ref:</b> <a href="/git/'$gituser/$repo/$refname'/files.html">'$refname'</a><br/>'
+	if(! ~ $#oldcommit 0) {
+		echo '<b>parent:</b> <a href="/git/'$gituser/$repo/$oldcommit'/files.html">'$oldcommit'</a><br/>'
+	}
+	echo '	<b>author:</b> '$author'<br/>
+		<b>date:</b> '$date'
+		<pre id="commit">'$msg'</pre><br/>
+		</p>'
+	cd /mnt/$repo
+	echo '	<div id="diff">'
+	git/export $refname | htcat | difftohtml
+	echo '	</div>
+		</body>
+		</html>'
+
+case 'patch'
+	gituser=$2
+	repo=$3
+	hash=$4
+
+	repons $gituser $repo
+	cd /mnt/$repo
+	git/export $hash
+
 }
+
