@@ -14,6 +14,7 @@ fn htcat {
 		s/>/\&gt;/g;
 		s/"/\&quot;/g;
 		s/''/\&#39;/g
+		s/	/\&nbsp;\&nbsp;\&nbsp;\&nbsp;/g
 	' $*
 }
 
@@ -70,8 +71,9 @@ fn prelude {
 
 			#code{
 				background: #ffffea;
-				border: #99994cff;
+				border: 1px solid #99994c;
 				overflow: auto;
+				padding: 4px;
 			}
 		</style>
 	 	<link rel="alternate" type="application/rss+xml" href="feed.rss" title="rss">
