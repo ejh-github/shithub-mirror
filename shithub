@@ -365,7 +365,7 @@ case 'view'
 		for(f in `$nl{ls}){
 			url=`$nl{echo -n $f/f.html | urlencode}
 			fname=`$nl{echo -n $f | htcat}
-			echo '<a href="'$url'">'$fname'</a>'
+			echo '<a href="'$url'">'$fname'</a><br/>'
 		}
 		echo '	</div>'
 	}
