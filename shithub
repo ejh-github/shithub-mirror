@@ -42,6 +42,35 @@ fn repons {
 	rfork m
 }
 
+fn formatcommit {
+	phash=$1
+
+	message=`{htcat /mnt/git/object/$phash/msg | sed 1q}
+	date=`{date -t `{mtime /mnt/git/object/$phash/msg | awk '{print $1}'}}
+	author=`"{htcat /mnt/git/object/$phash/author | awk '{print $1}'}
+	shorthash=`{echo $phash | awk '{print substr($0, 0, 8)}'}
+	echo '	<div id="commit">
+		'$shorthash' – '$author' – '$"date'
+		<pre>
+		'$"message'</pre>
+		</div>'
+}
+
+fn shortlog {
+	ref=$1
+	commitcount=$2
+
+	d=`{pwd}
+	commithash=`{cat /mnt/git/$ref/hash | sed 1q}
+	count=()
+	while (! ~ $#commithash 0 && ! ~ $#count $commitcount) {
+		count=($count 1)
+		formatcommit $commithash
+		echo '<br/>'
+		commithash=`{cat /mnt/git/object/$commithash/parent | sed 1q}
+	}
+	cd $d
+}
 
 fn prelude {
 	echo '
@@ -75,6 +104,14 @@ fn prelude {
 				overflow: auto;
 				padding: 4px;
 			}
+
+			#commit{
+				font-family: sans-serif;
+				background: #eeeeee;
+				border: 1px solid #cccccc;
+				padding: 4px;
+			}
+
 		</style>
 	 	<link rel="alternate" type="application/rss+xml" href="feed.rss" title="rss">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -97,6 +134,8 @@ fn user_prelude {
 		<a href="/git/'$puser/$prepo/$phash'/info.html">Info</a>
 		&nbsp;•&nbsp;
 		<a href="/git/'$puser/$prepo/$phash'/files.html">Files</a>
+		&nbsp;•&nbsp;
+		<a href="/git/'$puser/$prepo/$phash'/log.html">Log</a>
 		</div>'
 }
 
@@ -299,5 +338,37 @@ case 'viewraw'
 	}
 	cd /mnt/git/$ref/tree
 	cat $file
+
+case 'log'
+	gituser=$2
+	repo=$3
+	refname=$4
+
+	repons $gituser $repo
+	repodir=/mnt/$repo/.git
+	if(! ref=`{resolveref $refname}){
+		echo '<b>invalid ref '$refname'</b>'
+		exit
+	}
+
+	if(test -f /mnt/git/$ref/hash)
+		hash=`{cat /mnt/git/$ref/hash}
+	if not
+		hash=$ref
+
+	user_prelude $gituser $repo $hash
+
+	if(! test -d /mnt/git/$ref/tree){
+		echo '	<p>No commits yet.</p>
+			</body>
+			</html>
+		'
+		exit
+	}
+	cd /mnt/git/$ref/tree
+	echo '<br/>'
+	shortlog $ref 100
+	echo '	</body>
+		</html>'
 
 }
