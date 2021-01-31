@@ -14,7 +14,6 @@ fn htcat {
 		s/>/\&gt;/g;
 		s/"/\&quot;/g;
 		s/''/\&#39;/g
-		s/	/\&nbsp;\&nbsp;\&nbsp;\&nbsp;/g
 	' $*
 }
 
@@ -81,12 +80,12 @@ fn difftohtml {
 	BEGIN { started = 0; diff = 0; }
 	/^---$/ { diff = 1; next }
 	/^diff .*$/ { if(diff && !started) started = 1; next }
-	/^\+\+\+ .*$/ { printf "<div id='files'>%s</div>", $0; next }
-	/^--- .*$/ { printf "<div id='files'>%s</div>", $0; next }
-	/^@@ .*$/ { printf "<div id='separator'>%s</div>", $0; next }
-	/^\+.*$/ { printf "<div id='add'>%s</div>", $0; next }
-	/^-.*$/ { printf "<div id='del'>%s</div>", $0; next }
-	{ if(started) { printf "&nbsp;%s<br/>", substr($0, 2); } }
+	/^\+\+\+ .*$/ { if(started) printf "<pre id='files'>%s</pre>\n", $0; next }
+	/^--- .*$/ { if(started) printf "<pre id='files'>%s</pre>\n", $0; next }
+	/^@@ .*$/ { if(started) printf "<pre id='sep'>%s</pre>\n", $0; next }
+	/^\+.*$/ { if(started) printf "<pre id='add'>%s</pre>\n", $0; next }
+	/^-.*$/ { if(started) printf "<pre id='del'>%s</pre>\n", $0; next }
+	{ if(started) { printf "<pre id=ctx>%s</pre>\n", substr($0, 2); } }
 	'
 }
 
@@ -102,6 +101,7 @@ fn prelude {
 				margin: auto;
 				max-width: 50em;
 				font-family: sans-serif;
+				tab-space: 8;
 			}
 			h1{
 				font-size: 1.5em;
@@ -137,18 +137,25 @@ fn prelude {
 
 			#diff #files{
 				background: #efefef;
+				margin: 0em;
 			}
 
-			#diff #separator{
+			#diff #sep{
 				background: #eaffff;
+				margin: 0em;
 			}
 
 			#diff #add{
 				background: #e6ffed;
+				margin: 0em;
 			}
 
 			#diff #del{
 				background: #ffeef0;
+				margin: 0em;
+			}
+			#diff #ctx{
+				margin: 0em;
 			}
 		</style>
 	 	<link rel="alternate" type="application/rss+xml" href="feed.rss" title="rss">
