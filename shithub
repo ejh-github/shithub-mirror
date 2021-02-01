@@ -99,7 +99,8 @@ fn prelude {
 			body{
 				padding: 3em;
 				margin: auto;
-				max-width: 50em;
+				min-width: 50em;
+				width: min-content;
 				font-family: sans-serif;
 				tab-space: 8;
 			}
