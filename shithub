@@ -85,7 +85,7 @@ fn difftohtml {
 	/^@@ .*$/ { if(started) printf "<pre id='sep'>%s</pre>\n", $0; next }
 	/^\+.*$/ { if(started) printf "<pre id='add'>%s</pre>\n", $0; next }
 	/^-.*$/ { if(started) printf "<pre id='del'>%s</pre>\n", $0; next }
-	{ if(started) { printf "<pre id=ctx>%s</pre>\n", substr($0, 2); } }
+	{ if(started) { printf "<pre id=ctx> %s</pre>\n", substr($0, 2); } }
 	'
 }
 
