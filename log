@@ -1,0 +1,42 @@
+#!/bin/rc -e
+
+. /sys/lib/shithub/common.rc
+
+cd $1
+shift
+
+rfork ne
+nl='
+'
+
+gituser=$1
+repo=$2
+refname=$3
+
+repons $gituser $repo
+repodir=/mnt/$repo/.git
+if(! ref=`{resolveref $refname}){
+	echo '<b>invalid ref '$refname'</b>'
+	exit
+}
+
+if(test -f /mnt/git/$ref/hash)
+	hash=`{cat /mnt/git/$ref/hash}
+if not
+	hash=$ref
+
+user_prelude $gituser $repo $hash
+
+if(! test -d /mnt/git/$ref/tree){
+	echo '	<p>No commits yet.</p>
+		</body>
+		</html>
+	'
+	exit
+}
+cd /mnt/git/$ref/tree
+echo '	<p>'
+shortlog $gituser $repo $ref 100
+echo '	</p>'
+echo '	</body>
+	</html>'

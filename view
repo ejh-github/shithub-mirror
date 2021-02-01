@@ -1,0 +1,57 @@
+#!/bin/rc -e
+
+. /sys/lib/shithub/common.rc
+
+cd $1
+shift
+
+rfork ne
+nl='
+'
+
+gituser=$1
+repo=$2
+refname=$3
+file=$4
+
+repons $gituser $repo
+if(! ref=`{resolveref $refname}){
+	echo '<b>invalid ref '$refname'</b>'
+	exit
+}
+cd /mnt/git/$ref/tree
+if(~ $file '')
+	file='.'
+hash=`{cat /mnt/git/$ref/hash}
+
+user_prelude $gituser $repo $hash
+
+echo '	<p>
+	<b>ref:</b> <a href="'/git/$gituser/$repo/$hash/files.html'">'$hash'</a><br/>
+	</p>'
+if(test -f $file){
+	echo '	<a href="'/git/$gituser/$repo/$hash/$file'/raw">View raw version</a>'
+	type=`{file -m $file}
+	switch($type){
+	case text/*
+		echo '	<pre id="code">'
+		htcat $file
+		echo '	</pre>'
+	case image/*
+		echo '	<br/><div><img src="'/git/$gituser/$repo/$hash/$file'/raw" /></div>'
+	case *
+		echo '	<p>Binary file not displayed</p>'
+	}
+}
+if not if(test -d $file){
+	cd $file
+	echo '	<div id="code">'
+	for(f in `$nl{ls}){
+		url=`$nl{echo -n $f/f.html | urlencode}
+		fname=`$nl{echo -n $f | htcat}
+		echo '<a href="'$url'">'$fname'</a><br/>'
+	}
+	echo '	</div>'
+}
+echo '	</body>
+	</html>'

@@ -1,0 +1,61 @@
+#!/bin/rc -e
+
+. /sys/lib/shithub/common.rc
+
+cd $1
+shift
+
+rfork ne
+nl='
+'
+
+gituser=$1
+repo=$2
+refname=$3
+
+repons $gituser $repo
+repodir=/mnt/$repo/.git
+if(! ref=`{resolveref $refname}){
+	echo '<b>invalid ref '$refname'</b>'
+	exit
+}
+
+if(test -f /mnt/git/$ref/hash)
+	hash=`{cat /mnt/git/$ref/hash}
+if not
+	hash=$ref
+
+user_prelude $gituser $repo $hash		
+echo '	<h3>Clone</h3>
+	<div>
+	<b>clone:</b> git://shithub.us/'$gituser/$repo' gits://shithub.us/'$gituser/$repo'<br>
+	<b>push:</b> hjgit://shithub.us/'$gituser/$repo'<br>'
+if(test -f $repodir/contact)
+	echo '	<b>patches to: </b>'^`$nl{cat $repodir/contact}^'<br>'
+echo '	</div>'
+
+
+if(test -f /mnt/git/object/$hash/msg){
+	echo '	<h3>Last commit</h3>'
+	formatcommit $gituser $repo $hash
+}
+
+echo '	<h3>About</h3>
+	<pre id="desc">'
+if(test -f $repodir/README)
+	htcat $repodir/README
+if not if(test -f README)
+	htcat README
+if not if (test -f README.md)
+	htcat README.md
+if not if(test -f $repodir/desc)
+	htcat $repodir/desc
+if not if(test -f $repodir/description)
+	htcat $repodir/description
+if not
+	echo 'this repo has no description'
+echo '
+	</pre>
+	</body>
+	</html>
+'

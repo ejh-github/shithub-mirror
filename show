@@ -1,0 +1,46 @@
+#!/bin/rc -e
+
+. /sys/lib/shithub/common.rc
+
+cd $1
+shift
+
+rfork ne
+nl='
+'
+
+gituser=$1
+repo=$2
+refname=$3
+
+repons $gituser $repo
+repodir=/mnt/$repo/.git
+if(! ref=`{resolveref $refname}){
+	echo '<b>invalid ref '$refname'</b>'
+	exit
+}
+
+user_prelude $gituser $repo $refname
+
+oldcommit=`{cat /mnt/git/$ref/parent}
+author=`''{htcat /mnt/git/$ref/author}
+date=`''{date `{mtime /mnt/git/$ref/msg | awk '{print $1}'}}
+msg=`''{htcat /mnt/git/$ref/msg}
+echo '	<p>
+	<a href="/git/'$gituser/$repo/$refname'/patch">Download patch</a><br/>
+	</p>
+	<p>
+	<b>ref:</b> <a href="/git/'$gituser/$repo/$refname'/files.html">'$refname'</a><br/>'
+if(! ~ $#oldcommit 0) {
+	echo '<b>parent:</b> <a href="/git/'$gituser/$repo/$oldcommit'/files.html">'$oldcommit'</a><br/>'
+}
+echo '	<b>author:</b> '$author'<br/>
+	<b>date:</b> '$date'
+	<pre id="commit">'$msg'</pre><br/>
+	</p>'
+cd /mnt/$repo
+echo '	<div id="diff">'
+git/export $refname | htcat | difftohtml
+echo '	</div>
+	</body>
+	</html>'

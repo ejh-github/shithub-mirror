@@ -1,6 +1,16 @@
 RCFILES=\
-	shithub\
 	newrepo
+
+PAGEFILES=\
+	list\
+	info\
+	files\
+	tar\
+	view\
+	viewraw\
+	log\
+	show\
+	patch
 
 LIBFILES=\
 	common.rc
@@ -10,6 +20,8 @@ WEBFILES=\
 	toilet.jpg
 
 install:
+	mkdir -p /rc/bin/shithub
+	cp $PAGEFILES /rc/bin/shithub
 	mkdir -p /sys/lib/shithub
 	cp $LIBFILES /sys/lib/shithub
 	cp $RCFILES /rc/bin

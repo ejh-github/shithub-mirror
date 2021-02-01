@@ -1,0 +1,18 @@
+#!/bin/rc -e
+
+. /sys/lib/shithub/common.rc
+
+cd $1
+shift
+
+rfork ne
+nl='
+'
+
+gituser=$1
+repo=$2
+hash=$3
+
+repons $gituser $repo
+cd /mnt/$repo
+git/export $hash

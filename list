@@ -1,0 +1,35 @@
+#!/bin/rc -e
+
+. /sys/lib/shithub/common.rc
+
+cd $1
+shift
+
+rfork ne
+nl='
+'
+
+prelude Repolist
+echo '	<h1>Repos</h1>'
+udir=()
+for(repo in `$nl{ls */}){
+	ndir=`{basename -d $repo}
+	if(! ~ $udir $ndir)
+		echo '</dl>'
+	if(! ~ $udir $ndir){
+		echo '<h3>'$ndir'</h3>'
+		echo '<dl>'
+		udir=$ndir
+	}
+	if(test -e $repo/.git/webpublish){
+		echo '<dt><a href="/git/'$repo'/HEAD/info.html">'$repo'</a></dt>'
+		echo '<dd>'
+		if(test -f $repo/.git/desc)
+			htcat $repo/.git/desc
+		if not if(test -f $repo/.git/description)
+			htcat $repo/.git/description
+		if not
+			echo 'probably some code'
+		echo '</dd>'
+	}
+}
