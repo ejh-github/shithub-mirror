@@ -77,15 +77,16 @@ fn shortlog {
 
 fn difftohtml {
 	awk '
+	function printpre(id, text) { printf "<pre id='%s'>%s</pre>", id, text }
 	BEGIN { started = 0; diff = 0; }
 	/^---$/ { diff = 1; next }
-	/^diff .*$/ { if(diff && !started) started = 1; next }
-	/^\+\+\+ .*$/ { if(started) printf "<pre id='files'>%s</pre>\n", $0; next }
-	/^--- .*$/ { if(started) printf "<pre id='files'>%s</pre>\n", $0; next }
-	/^@@ .*$/ { if(started) printf "<pre id='sep'>%s</pre>\n", $0; next }
-	/^\+.*$/ { if(started) printf "<pre id='add'>%s</pre>\n", $0; next }
-	/^-.*$/ { if(started) printf "<pre id='del'>%s</pre>\n", $0; next }
-	{ if(started) { printf "<pre id=ctx> %s</pre>\n", substr($0, 2); } }
+	/^diff .*$/ && diff && !started { started = 1; next }
+	/^\+\+\+ .*$/ && started { printpre("files", $0); next }
+	/^--- .*$/ && started { printpre("files", $0); next }
+	/^@@ .*$/ && started { printpre("sep", $0); next }
+	/^\+.*$/ && started { printpre("add", $0); next }
+	/^-.*$/ && started { printpre("del", $0); next }
+	started { printpre("ctx", $0); next }
 	'
 }
 
