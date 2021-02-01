@@ -46,32 +46,38 @@ fn repons {
 }
 
 fn formatcommit {
-	phash=$1
+	puser=$1
+	prepo=$2
+	phash=$3
 
 	message=`{htcat /mnt/git/object/$phash/msg | sed 1q}
 	date=`{date -t `{mtime /mnt/git/object/$phash/msg | awk '{print $1}'}}
 	author=`"{htcat /mnt/git/object/$phash/author | awk '{print $1}'}
 	shorthash=`{echo $phash | awk '{print substr($0, 0, 8)}'}
 	echo '	<div id="commit">
-		<a href=/git/'$gituser/$repo/$phash'/commit.html>'$shorthash'</a>
+		<a href=/git/'$puser/$prepo/$phash'/commit.html>'$shorthash'</a>
 		 – '$author' – '$"date'
 		<pre>'$"message'</pre>
 		</div>'
 }
 
 fn shortlog {
-	ref=$1
-	commitcount=$2
+	puser=$1
+	prepo=$2
+	pref=$3
+	pcount=$4
 
 	d=`{pwd}
-	commithash=`{cat /mnt/git/$ref/hash | sed 1q}
+	commithash=`{cat /mnt/git/$pref/hash | sed 1q}
 	count=()
-	while (! ~ $#commithash 0 && ! ~ $#count $commitcount) {
+	while (! ~ $#commithash 0 && ! ~ $#count $pcount) {
 		count=($count 1)
-		formatcommit $commithash
+		formatcommit $puser $prepo $commithash
 		echo '<br/>'
 		commithash=`{cat /mnt/git/object/$commithash/parent | sed 1q}
 	}
+	if(! ~ $"commithash '')
+		echo '<a href="/git/'$puser/$prepo/$commithash'/log.html">Next</a>'
 	cd $d
 }
 
@@ -257,7 +263,7 @@ case 'info'
 
 	if(test -f /mnt/git/object/$hash/msg){
 		echo '	<h3>Last commit</h3>'
-		formatcommit $hash
+		formatcommit $gituser $repo $hash
 	}
 
 	echo '	<h3>About</h3>
@@ -416,10 +422,8 @@ case 'log'
 	}
 	cd /mnt/git/$ref/tree
 	echo '	<p>'
-	shortlog $ref 100
+	shortlog $gituser $repo $ref 100
 	echo '	</p>'
-	if(! ~ $"commithash '')
-		echo '<a href="/git/'$gituser/$repo/$commithash'/log.html">Next</a>'
 	echo '	</body>
 		</html>'
 
