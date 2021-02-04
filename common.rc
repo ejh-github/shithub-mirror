@@ -91,6 +91,9 @@ fn difftohtml {
 }
 
 fn prelude {
+	puser=$1
+	prepo=$2
+
 	echo '
 	<!DOCTYPE html>
 	<html>
@@ -159,11 +162,12 @@ fn prelude {
 			#diff #ctx{
 				margin: 0em;
 			}
-		</style>
-	 	<link rel="alternate" type="application/rss+xml" href="feed.rss" title="rss">
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		</style>'
+	if(! ~ $puser '')
+	 	echo '<link rel="alternate" type="application/rss+xml" href="/git/'$puser/$prepo'/HEAD/feed.rss" title="rss">'
+	echo '	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<title>Shithub: '$"1'</title>
+		<title>Shithub: '$"prepo'</title>
 	</head>
 	<body>
 	'
@@ -174,7 +178,7 @@ fn user_prelude {
 	prepo=$2
 	phash=$3
 
-	prelude $prepo
+	prelude $puser $prepo
 	echo '	<h1><a href="/git/repos.html">Git</a>: 
 		<a href="/git/'$puser/$prepo/$phash'/info.html">'$prepo'</a></h1>
 		<div id="linkbar">

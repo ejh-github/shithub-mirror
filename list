@@ -9,7 +9,7 @@ rfork ne
 nl='
 '
 
-prelude Repolist
+prelude '' Repolist
 echo '	<h1>Repos</h1>'
 udir=()
 for(repo in `$nl{ls */}){
