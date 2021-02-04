@@ -1,0 +1,77 @@
+#!/bin/rc -e
+
+. /sys/lib/shithub/common.rc
+
+fn rssitem {
+	puser=$1
+	prepo=$2
+	phash=$3
+
+	d=`{pwd}
+	guid='http://shithub.us/git/'$puser/$prepo/$phash'/commit.html'
+	message=`{htcat /mnt/git/object/$phash/msg | sed 1q}
+	description=`''{htcat /mnt/git/object/$phash/msg}
+	date=`{date -m `{mtime /mnt/git/object/$phash/msg |awk '{print $1}'}}
+	author=`"{htcat /mnt/git/object/$phash/author |awk '{print $1}'}
+	echo '	<item>
+		<guid>'$"guid'</guid>
+		<pubDate>'$"date'</pubDate>
+		<title>'$"message'</title>
+		<author>'$"author'</author>
+		<link>'$guid'</link>
+		<description><![CDATA[ <pre>'$description'</pre> ]]></description>
+		</item>'		
+	cd $d
+}
+
+cd $1
+shift
+
+rfork ne
+nl='
+'
+
+gituser=$1
+repo=$2
+refname=$3
+
+repons $gituser $repo
+repodir=/mnt/$repo/.git
+if(! ref=`{resolveref $refname}){
+	echo '<b>invalid ref '$refname'</b>'
+	exit
+}
+
+if(test -f /mnt/git/$ref/hash)
+	hash=`{cat /mnt/git/$ref/hash}
+if not
+	hash=$ref
+
+echo '<?xml version="1.0" encoding="utf-8" ?>
+	<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+	<atom:link href="http://shithub.us/git/'$gituser/$repo/'HEAD/log.rss" rel="self" type="application/rss+xml" />
+	<title>'$gituser/$repo' git log</title>
+	<link>http://shithub.us/git/'$gituser/$repo/'HEAD/log.html</link>
+	<description>shithub git/log for repository '$gituser/$repo'</description>
+	<lastBuildDate>'`"{date -m}'</lastBuildDate>
+	<language>en-us</language>
+'
+
+if(! test -d /mnt/git/$ref/tree){
+	echo '	</channel>
+		</rss>
+	'
+	exit
+}
+cd /mnt/git/$ref/tree
+commithash=`{cat /mnt/git/HEAD/hash | sed 1q}
+count=()
+while (! ~ $#commithash 0 && ! ~ $#count 10) {
+	count=($count 1)
+	rssitem $gituser $repo $commithash
+	commithash=`{cat /mnt/git/object/$commithash/parent | sed 1q}
+}
+echo '	</channel>
+	</rss>
+'

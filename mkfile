@@ -10,7 +10,8 @@ PAGEFILES=\
 	viewraw\
 	log\
 	show\
-	patch
+	patch\
+	feed
 
 LIBFILES=\
 	common.rc
