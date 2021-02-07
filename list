@@ -9,7 +9,7 @@ rfork ne
 nl='
 '
 
-prelude '' 'shithub: the fragrant git host'
+prelude '' 'the fragrant git host'
 echo '	<img src="/static/shithub.png" />
 	<br/>
 
