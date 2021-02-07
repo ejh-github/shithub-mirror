@@ -24,7 +24,7 @@ echo '	<img src="/static/shithub.png" />
 	user guide</a></p>
 	
 	<p>Shithub is a community service, written by people who
-	avoids browsers. As a result, the web interface is
+	avoid browsers. As a result, the web interface is
 	missing a number of features.<br/>
 	Take a look at how you could <a href="/static/contributing.html">contribute</a>.
 	</p>
