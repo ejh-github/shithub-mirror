@@ -49,7 +49,7 @@ fn formatcommit {
 	author=`"{htcat /mnt/git/object/$phash/author | awk '{print $1}'}
 	shorthash=`{echo $phash | awk '{print substr($0, 0, 8)}'}
 	echo '	<div id="commit">
-		<a href=/git/'$puser/$prepo/$phash'/commit.html>'$shorthash'</a>
+		<a href=/'$puser/$prepo/$phash'/commit.html>'$shorthash'</a>
 		 – '$author' – '$"date'
 		<pre>'$"message'</pre>
 		</div>'
@@ -71,7 +71,7 @@ fn shortlog {
 		commithash=`{cat /mnt/git/object/$commithash/parent | sed 1q}
 	}
 	if(! ~ $"commithash '')
-		echo '<a href="/git/'$puser/$prepo/$commithash'/log.html">Next</a>'
+		echo '<a href="/'$puser/$prepo/$commithash'/log.html">Next</a>'
 	cd $d
 }
 
@@ -179,13 +179,13 @@ fn user_prelude {
 	phash=$3
 
 	prelude $puser $prepo
-	echo '	<h1><a href="/git/repos.html">Git</a>: 
-		<a href="/git/'$puser/$prepo/$phash'/info.html">'$prepo'</a></h1>
+	echo '	<h1><a href="/">shithub</a>: 
+		<a href="/'$puser/$prepo/$phash'/info.html">'$prepo'</a></h1>
 		<div id="linkbar">
-		<a href="/git/'$puser/$prepo/$phash'/info.html">Info</a>
+		<a href="/'$puser/$prepo/$phash'/info.html">Info</a>
 		&nbsp;•&nbsp;
-		<a href="/git/'$puser/$prepo/$phash'/files.html">Files</a>
+		<a href="/'$puser/$prepo/$phash'/files.html">Files</a>
 		&nbsp;•&nbsp;
-		<a href="/git/'$puser/$prepo/$phash'/log.html">Log</a>
+		<a href="/'$puser/$prepo/$phash'/log.html">Log</a>
 		</div>'
 }

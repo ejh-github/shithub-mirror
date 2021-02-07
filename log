@@ -36,7 +36,7 @@ if(! test -d /mnt/git/$ref/tree){
 }
 cd /mnt/git/$ref/tree
 echo '	<p>
-	<a href="/git/'$gituser/$repo'/HEAD/feed.rss">RSS feed</a>
+	<a href="/'$gituser/$repo'/HEAD/feed.rss">RSS feed</a>
 	</p>
 	<p>'
 shortlog $gituser $repo $ref 100

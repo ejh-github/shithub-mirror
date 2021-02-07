@@ -27,12 +27,12 @@ author=`''{htcat /mnt/git/$ref/author}
 date=`''{date `{mtime /mnt/git/$ref/msg | awk '{print $1}'}}
 msg=`''{htcat /mnt/git/$ref/msg}
 echo '	<p>
-	<a href="/git/'$gituser/$repo/$refname'/patch">Download patch</a><br/>
+	<a href="/'$gituser/$repo/$refname'/patch">Download patch</a><br/>
 	</p>
 	<p>
-	<b>ref:</b> <a href="/git/'$gituser/$repo/$refname'/files.html">'$refname'</a><br/>'
+	<b>ref:</b> <a href="/'$gituser/$repo/$refname'/files.html">'$refname'</a><br/>'
 if(! ~ $#oldcommit 0) {
-	echo '<b>parent:</b> <a href="/git/'$gituser/$repo/$oldcommit'/files.html">'$oldcommit'</a><br/>'
+	echo '<b>parent:</b> <a href="/'$gituser/$repo/$oldcommit'/files.html">'$oldcommit'</a><br/>'
 }
 echo '	<b>author:</b> '$author'<br/>
 	<b>date:</b> '$date'

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		body{
+			padding: 3em;
+			margin: auto;
+			min-width: 50em;
+			width: min-content;
+			font-family: sans-serif;
+			tab-space: 8;
+		}
+		h1{
+			font-size: 1.5em;
+			color: #4c4c99;
+		}
+		h2{
+			font-size: 1.3em;
+			color: #4c4c99;
+		}
+		h3{
+			font-size: 1em;
+			color: #4c4c99;
+		}
+
+		#code{
+			background: #ffffea;
+			border: 1px solid #99994c;
+			overflow: auto;
+			padding: 4px;
+		}
+
+		#commit{
+			font-family: sans-serif;
+			background: #eeeeee;
+			border: 1px solid #cccccc;
+			padding: 4px;
+		}
+
+		#diff{
+			font-family: monospace;
+			border: 2px solid #efefef;
+		}
+
+		#diff #files{
+			background: #efefef;
+			margin: 0em;
+		}
+
+		#diff #sep{
+			background: #eaffff;
+			margin: 0em;
+		}
+
+		#diff #add{
+			background: #e6ffed;
+			margin: 0em;
+		}
+
+		#diff #del{
+			background: #ffeef0;
+			margin: 0em;
+		}
+		#diff #ctx{
+			margin: 0em;
+		}
+	</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Shithub: shithub: the fragrant git host</title>
+</head>
+<body>
+<a href="/">
+<img src="/static/shithub.png"/>
+</a>
+<br>
+
+<h2>Using Shithub</h2>
+
+Creating a repository:
+
+<pre>
+	rcpu -h shithub.us \
+		-c newrepo -d 'description' \
+		-c 'contact@me.com' repo
+	git/push -u hjgit://shithub.us/$user/repo
+</pre>
+
+<p>Your repositories live under</p>
+
+<pre>
+	/usr/git/$user
+</pre>
+
+<p>A repo contains a few control files for the web
+interface. All of them live under the repository,
+in /usr/git/$user/$repo/.git/$file. These are the
+control files that are currently supported:</p>
+
+<p>
+<dl>
+<dt><code>webpublish</code></dt>
+<dd>If this file exists, then the repository is
+published in the public web list of repositories.
+</dd>
+<dt><code>desc, description</code></dt>
+<dd>The short description of the repository. It shows
+up in the repo list.</dd>
+<dt><code>contact</code></dt>
+<dd>Contact information for submitting patches.
+Shows up on the repository info page.</dd>
+<dt><code>README</code></dt>
+<dd>A readme file, shown in the info page of the
+repository. If this file is not present, then a
+README from within the repository will be used,
+and if neither exist, then the description will
+be used.</dd>
+</dl>
+</p>
+
+<p>You can cd into there create the repository,
+and flag them as web-visible by hand, or you can
+use the <code>newrepo</code>
+script, which is a small wrapper around <code>
+git/init</code> that creates the control files:</p>
+
+<pre>
+	newrepo [-d description] [-c contact] reponame
+</pre>
+
+<p>
+README files in the repo will be rendered,
+but if you don't want to clutter root of your
+repository with junk, you can also add
+README files here:
+</p>
+
+<pre>
+	/usr/git/$user/$repo/.git/README
+</pre>
+
+</body>
+</html>

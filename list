@@ -9,8 +9,31 @@ rfork ne
 nl='
 '
 
-prelude '' Repolist
-echo '	<h1>Repos</h1>'
+prelude '' 'shithub: the fragrant git host'
+echo '	<img src="/static/shithub.png" />
+	<br/>
+
+	<p>Shithub is a site for hosting git repositories. It is
+	running on <a href="https://orib.dev/git9.html">git9</a>,
+	hosted on <a href=http://9front.org>9front</a>.</p>
+
+	<p>To get an account, email <a href="mailto:ori@eigenstate.org">
+	Ori Bernstein &lt;ori@eigenstate.org&gt;</a>.</p>
+
+	<p>To get started using shithub, read our <a href="/static/guide.html">
+	user guide</a></p>
+	
+	<p>Shithub is a community service, written by people who
+	avoids browsers. As a result, the web interface is
+	missing a number of features.<br/>
+	Take a look at how you could <a href="/static/contributing.html">contribute</a>.
+	</p>
+
+'
+echo '	<h2>Repositories</h2>
+	A mirror is available at <a href="http://git.pmikkelsen.com">pmikkelsens</a>
+	<br/>'
+
 udir=()
 for(repo in `$nl{ls */}){
 	ndir=`{basename -d $repo}
@@ -22,7 +45,7 @@ for(repo in `$nl{ls */}){
 		udir=$ndir
 	}
 	if(test -e $repo/.git/webpublish){
-		echo '<dt><a href="/git/'$repo'/HEAD/info.html">'$repo'</a></dt>'
+		echo '<dt><a href="/'$repo'/HEAD/info.html">'$repo'</a></dt>'
 		echo '<dd>'
 		if(test -f $repo/.git/desc)
 			htcat $repo/.git/desc

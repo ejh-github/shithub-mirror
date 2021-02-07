@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		body{
+			padding: 3em;
+			margin: auto;
+			min-width: 50em;
+			width: min-content;
+			font-family: sans-serif;
+			tab-space: 8;
+		}
+		h1{
+			font-size: 1.5em;
+			color: #4c4c99;
+		}
+		h2{
+			font-size: 1.3em;
+			color: #4c4c99;
+		}
+		h3{
+			font-size: 1em;
+			color: #4c4c99;
+		}
+
+		#code{
+			background: #ffffea;
+			border: 1px solid #99994c;
+			overflow: auto;
+			padding: 4px;
+		}
+
+		#commit{
+			font-family: sans-serif;
+			background: #eeeeee;
+			border: 1px solid #cccccc;
+			padding: 4px;
+		}
+
+		#diff{
+			font-family: monospace;
+			border: 2px solid #efefef;
+		}
+
+		#diff #files{
+			background: #efefef;
+			margin: 0em;
+		}
+
+		#diff #sep{
+			background: #eaffff;
+			margin: 0em;
+		}
+
+		#diff #add{
+			background: #e6ffed;
+			margin: 0em;
+		}
+
+		#diff #del{
+			background: #ffeef0;
+			margin: 0em;
+		}
+		#diff #ctx{
+			margin: 0em;
+		}
+	</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Shithub: shithub: the scented git host</title>
+</head>
+<body>
+
+<a href="/">
+<img src="/static/shithub.png"/>
+</a>
+<br>
+
+<h2>Contributing</h2>
+
+<p>The code running this site is fully open source.
+It is hosted on shithub, here:</p>
+<pre>
+	<a href="/git/ori/shithub/HEAD/info.html">gits://shithub.us/ori/shithub</a>
+</pre>
+</p>
+
+<h3>Missing Features</h3>
+<p>
+<dl>
+	<dt><b>9p</b></dt>
+	<dd>
+	Right now, shithub provides no 9p
+	interface. Providing the repositories
+	directly over 9p is pointless, but
+	mounting each repositories git/fs
+	all the time could lead to excessive
+	memory use, since git/fs caches too
+	aggressively. Work on useful 9p browsing
+	is needed.
+	</dd>
+	<dt><b>Bug tracking</b></dt>
+	<dd>
+	It should be possible to report bugs in
+	a repository, add additional information,
+	and view discussion. Perhaps commenting
+	can be email-only on a public address.
+	</dd>
+	<dt><b>Patch submission</b></dt>
+	<dd>
+	It should be possible to submit patches.
+	Maybe this should be subsumed by the bug
+	tracking system.
+	</dd>
+	<dt><b>Continuous builds</b></dt>
+	<dd>
+	It'd be nice to have this, server costs
+	permitting.
+	</dd>
+	<dt><b>Hjgit for unix</b></dt>
+	<dd>
+	Right now, you need to push to shithub
+	from 9front. Porting 'tlsclient' with 
+	dp9ik auth would allow pushing from unix.
+	</dd>
+	<dt>
+	<dt><b>More</b></dt>
+	<dd>
+	This list is incomplete.
+	</dd>
+	<dt>
+</dl>
+
+</body>
+</html>

@@ -17,8 +17,9 @@ LIBFILES=\
 	common.rc
 
 WEBFILES=\
-	index.html\
-	toilet.jpg
+	shithub.png\
+	guide.html\
+	contributing.html\
 
 install:
 	mkdir -p /rc/bin/shithub

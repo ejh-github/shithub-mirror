@@ -27,10 +27,10 @@ hash=`{cat /mnt/git/$ref/hash}
 user_prelude $gituser $repo $hash
 
 echo '	<p>
-	<b>ref:</b> <a href="'/git/$gituser/$repo/$hash/files.html'">'$hash'</a><br/>
+	<b>ref:</b> <a href="'/$gituser/$repo/$hash/files.html'">'$hash'</a><br/>
 	</p>'
 if(test -f $file){
-	echo '	<a href="'/git/$gituser/$repo/$hash/$file'/raw">View raw version</a>'
+	echo '	<a href="'/$gituser/$repo/$hash/$file'/raw">View raw version</a>'
 	type=`{file -m $file}
 	switch($type){
 	case text/*
@@ -38,7 +38,7 @@ if(test -f $file){
 		htcat $file
 		echo '	</pre>'
 	case image/*
-		echo '	<br/><div><img src="'/git/$gituser/$repo/$hash/$file'/raw" /></div>'
+		echo '	<br/><div><img src="'/$gituser/$repo/$hash/$file'/raw" /></div>'
 	case *
 		echo '	<p>Binary file not displayed</p>'
 	}
