@@ -17,16 +17,17 @@ echo '	<img src="/static/shithub.png" />
 	running on <a href="https://orib.dev/git9.html">git9</a>,
 	hosted on <a href=http://9front.org>9front</a>.</p>
 
-	<p>To get an account, email <a href="mailto:ori@eigenstate.org">
-	Ori Bernstein &lt;ori@eigenstate.org&gt;</a>.</p>
+	<p>To get an account, or set up a group project email
+	<a href="mailto:ori@eigenstate.org">Ori Bernstein &lt;ori@eigenstate.org&gt;</a>.
+	</p>
 
 	<p>To get started using shithub, read our <a href="/static/guide.html">
 	user guide</a></p>
 	
 	<p>Shithub is a community service, written by people who
-	avoid browsers. As a result, the web interface is
-	missing a number of features.<br/>
-	Take a look at how you could <a href="/static/contributing.html">contribute</a>.
+	avoid browsers. As a result, the web interface is a work
+	in progress. Take a look at
+	<a href="/static/plots.html">what we want</a>.
 	</p>
 
 '
