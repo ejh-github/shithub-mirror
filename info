@@ -40,6 +40,7 @@ if(test -f /mnt/git/object/$hash/msg){
 	formatcommit $gituser $repo $hash
 }
 
+cd /mnt/git/object/$hash/tree
 echo '	<h3>About</h3>
 	<pre id="desc">'
 if(test -f $repodir/README)
